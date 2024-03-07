@@ -41,7 +41,7 @@ import tech.units.indriya.unit.TransformedUnit;
  * @author Martin Desruisseaux (IRD)
  */
 public final class Units {
-    /** Do not allows instantiation of this class. */
+    /** Does not allow instantiation of this class. */
     private Units() {}
 
     // Angle Units
@@ -56,7 +56,7 @@ public final class Units {
      * precision)</cite>.
      *
      * <p>This unit is non-linear and not practical for computation. Consequently, it should be
-     * avoid as much as possible. Unfortunately, this pseudo-unit is extensively used in the EPSG
+     * avoided as much as possible. Unfortunately, this pseudo-unit is extensively used in the EPSG
      * database (code 9107).
      */
     public static final Unit<Angle> DEGREE_MINUTE_SECOND =
@@ -76,9 +76,9 @@ public final class Units {
      * <p><cite>sign - degrees - decimal point - minutes (two digits) - integer seconds (two digits)
      * - fraction of seconds (any precision)</cite>.
      *
-     * <p>This unit is non-linear and not pratical for computation. Consequently, it should be avoid
-     * as much as possible. Unfortunatly, this pseudo-unit is extensively used in the EPSG database
-     * (code 9110).
+     * <p>This unit is non-linear and not practical for computation. Consequently, it should be
+     * avoided as much as possible. Unfortunately, this pseudo-unit is extensively used in the EPSG
+     * database (code 9110).
      */
     public static final Unit<Angle> SEXAGESIMAL_DMS =
             NonSI.DEGREE_ANGLE
@@ -127,8 +127,8 @@ public final class Units {
     }
 
     /**
-     * Unit name, willing to use {@link UnitFormat} to look up appropriate label if a name has not
-     * been not defined.
+     * Unit name, willing to use {@link UnitFormat} to look up the appropriate label if a name has
+     * not been not defined.
      *
      * <p>This allows us to format units like {@link Units#PIXEL}.
      */
@@ -140,7 +140,7 @@ public final class Units {
         return format.format(unit);
     }
     /**
-     * Unit symbol, willing to use {@link UnitFormat} to look up appropriate label if required.
+     * Unit symbol, willing to use {@link UnitFormat} to look up the appropriate label if required.
      *
      * <p>This allows us to format units like {@link Units#PIXEL}.
      */
@@ -162,35 +162,31 @@ public final class Units {
 
     /**
      * Checks whether two units can be considered equivalent. TransformedUnits are considered
-     * equivalent if they have the same system unit and their conversion factors to the system unit
+     * equivalent if they have the same system unit; their conversion factors to the system unit
      * produce the identity converter when the inverse of the second factor is concatenated with the
      * first factor, considering the precision of a float number. For other types of units, the
      * comparison is delegated to their normal equals method.
      */
-    public static final boolean equals(Unit<?> unit1, Unit<?> unit2) {
+    public static boolean equals(Unit<?> unit1, Unit<?> unit2) {
         if (unit1 == unit2) {
             return true;
         }
         if (unit1 != null) {
-            if (unit1 instanceof TransformedUnit<?>
-                    && unit2 != null
-                    && unit2 instanceof TransformedUnit<?>) {
-                TransformedUnit<?> tunit1 = (TransformedUnit<?>) unit1;
-                TransformedUnit<?> tunit2 = (TransformedUnit<?>) unit2;
+            if (unit1 instanceof TransformedUnit<?> && unit2 instanceof TransformedUnit<?>) {
+                TransformedUnit<?> TUnit1 = (TransformedUnit<?>) unit1;
+                TransformedUnit<?> TUnit2 = (TransformedUnit<?>) unit2;
                 if (unit1.getSystemUnit().equals(unit2.getSystemUnit())) {
                     try {
                         float factor =
                                 (float)
-                                        tunit1.getSystemConverter()
-                                                .concatenate(tunit2.getSystemConverter().inverse())
+                                        TUnit1.getSystemConverter()
+                                                .concatenate(TUnit2.getSystemConverter().inverse())
                                                 .convert(1.0f);
                         // NOTE: Matching old JSR-275 library practice, converting to float to
                         // compare factors to provide some tolerance
-                        if (factor == 1.0f) {
-                            return true;
-                        }
-                        return false;
-                    } catch (Exception e) {
+                        return factor == 1.0f;
+                    } catch (Exception ignored) {
+                        // This empty catch is concerning. Changed it to "ignored" as per standard.
                     }
                 }
             }
@@ -200,7 +196,7 @@ public final class Units {
     }
 
     /**
-     * Gets a UnitConverter between two units, wrapping any raised exception in a
+     * Gets a UnitConverter between two units, wrapping any raised exception in an
      * IllegalArgumentException.
      *
      * @throws IllegalArgumentException if unit1 can't be converter to unit2
@@ -218,7 +214,7 @@ public final class Units {
      *
      * @see UnitFormatter#parse(CharSequence)
      * @throws javax.measure.format.MeasurementParseException if any problem occurs while parsing
-     *     the specified character sequence (e.g. illegal syntax).
+     *     the specified character sequence (e.g., illegal syntax).
      * @throws UnsupportedOperationException if the {@link UnitFormatter} is unable to parse.
      * @return A unit instance
      */

@@ -34,7 +34,7 @@ import org.geotools.metadata.math.XMath;
 import org.geotools.util.Classes;
 
 /**
- * Parses and formats angles according a specified pattern. The pattern is a string containing any
+ * Parse and format angles according a specified pattern. The pattern is a string containing any
  * characters, with a special meaning for the following characters:
  *
  * <p>
@@ -57,13 +57,13 @@ import org.geotools.util.Classes;
  * minutes and seconds respectively. They must appear in this order (e.g. "<code>M'D</code>" is
  * illegal because "M" and "S" are inverted; "<code>D°S</code>" is illegal too because there is no
  * "M" between "D" and "S"). Lower-case letters {@code d}, {@code m} and {@code s} are for
- * fractional parts of degrees, minutes and seconds respectively. Only one of those may appears in a
+ * fractional parts of degrees, minutes and seconds respectively. Only one of those may appear in a
  * pattern, and it must be the last special symbol (e.g. "<code>D.dd°MM'</code>" is illegal because
  * "d" is followed by "M"; "{@code D.mm}" is illegal because "m" is not the fractional part of "D").
  *
  * <p>The number of occurrence of {@code D}, {@code M}, {@code S} and their lower-case counterpart
- * is the number of digits to format. For example, "DD.ddd" will format angle with two digits for
- * the integer part and three digits for the fractional part (e.g. 4.4578 will be formatted as
+ * is the number of digits to format. For example, "DD.ddd" will format an angle with two digits for
+ * the integer part and three digits for the fractional part (e.g., 4.4578 will be formatted as
  * "04.458"). Separator characters like <code>°</code>, <code>'</code> and <code>"</code> and
  * inserted "as-is" in the formatted string (except the decimal separator dot ("{@code .}"), which
  * is replaced by the local-dependent decimal separator). Separator characters may be completely
@@ -119,29 +119,29 @@ public class AngleFormat extends Format {
     static final int ALTITUDE = 2;
 
     /**
-     * A constant for the symbol to appears before the degrees fields. Fields PREFIX, DEGREES,
+     * A constant for the symbol to appears before the degree fields. Fields PREFIX, DEGREES,
      * MINUTES and SECONDS <strong>must</strong> have increasing values (-1, 0, +1, +2, +3).
      */
     private static final int PREFIX_FIELD = -1;
 
     /**
-     * Constant for degrees field. When formatting a string, this value may be specified to the
+     * Constant for degree field. When formatting a string, this value may be specified to the
      * {@link java.text.FieldPosition} constructor in order to get the bounding index where degrees
      * have been written.
      */
     public static final int DEGREES_FIELD = 0;
 
     /**
-     * Constant for minutes field. When formatting a string, this value may be specified to the
+     * Constant for minute field. When formatting a string, this value may be specified to the
      * {@link java.text.FieldPosition} constructor in order to get the bounding index where minutes
      * have been written.
      */
     public static final int MINUTES_FIELD = 1;
 
     /**
-     * Constant for seconds field. When formatting a string, this value may be specified to the
-     * {@link java.text.FieldPosition} constructor in order to get the bounding index where seconds
-     * have been written.
+     * Constant for second field. When formatting a string, this value may be specified to the
+     * {@link java.text.FieldPosition} constructor to get the bounding index where seconds have been
+     * written.
      */
     public static final int SECONDS_FIELD = 2;
 
@@ -166,7 +166,7 @@ public class AngleFormat extends Format {
      * Caractères à insérer au début ({@code prefix}) et à la suite des degrés, minutes et secondes
      * ({@code suffix0..2}). Ces champs doivent être {@code null} s'il n'y a rien à insérer.
      */
-    private String prefix = null, suffix0 = "\u00B0", suffix1 = "'", suffix2 = "\"";
+    private String prefix = null, suffix0 = "°", suffix1 = "'", suffix2 = "\"";
 
     /**
      * Indique s'il faut utiliser le séparateur décimal pour séparer la partie entière de la partie
@@ -208,7 +208,7 @@ public class AngleFormat extends Format {
         }
     }
 
-    /** Set the width for the specified field. All folowing fields will be set to 0. */
+    /** Set the width for the specified field. All the following fields will be set to 0. */
     @SuppressWarnings("fallthrough")
     private void setWidth(final int index, int width) {
         switch (index) {
@@ -240,15 +240,15 @@ public class AngleFormat extends Format {
     }
 
     /**
-     * Sets the suffix for the specified field. Suffix for all following fields will be set to their
-     * default value.
+     * Sets the suffix for the specified field. The Suffix for all following fields will be set to
+     * their default value.
      */
     @SuppressWarnings("fallthrough")
     private void setSuffix(final int index, String s) {
         switch (index) {
             case PREFIX_FIELD:
                 prefix = s;
-                s = "\u00B0"; // fall through
+                s = "°"; // fall through
             case DEGREES_FIELD:
                 suffix0 = s;
                 s = "'"; // fall through
@@ -267,7 +267,7 @@ public class AngleFormat extends Format {
      * @return An angle format in the given locale.
      */
     public static AngleFormat getInstance(final Locale locale) {
-        return new AngleFormat("D\u00B0MM.m'", locale);
+        return new AngleFormat("D°MM.m'", locale);
     }
 
     /**
@@ -281,7 +281,7 @@ public class AngleFormat extends Format {
      *   <li>{@linkplain AngleFormat.RoundingMethod#ROUND_HALF_DOWN}
      * </ul>
      */
-    public static enum RoundingMethod {
+    public enum RoundingMethod {
         /**
          * Round towards the even neighbour: e.g. {@code 2.5 => 2, 3.5 => 4}. This method minimizes
          * cumulative error over many values.
@@ -292,7 +292,7 @@ public class AngleFormat extends Format {
         ROUND_HALF_UP,
 
         /** Always round downwards: e.g. {@code 2.5 => 2, 3.5 => 3}. */
-        ROUND_HALF_DOWN;
+        ROUND_HALF_DOWN
     }
 
     /** The default rounding method ({@linkplain AngleFormat.RoundingMethod#ROUND_HALF_EVEN}). */
@@ -386,7 +386,8 @@ public class AngleFormat extends Format {
                     rounded = Math.round(scaledValue);
                     return rounded / scale;
 
-                    // Include impossible case to allow detection of new entries in RoundingMethod.
+                    // Include an impossible case to allow detection of new entries in
+                    // RoundingMethod.
                 case ROUND_HALF_EVEN:
                     throw new AssertionError(rm);
             }
@@ -396,9 +397,7 @@ public class AngleFormat extends Format {
         logger.log(
                 Level.WARNING,
                 String.format(
-                        "Can't round the value %s to the given precision %d",
-                        String.valueOf(value), precision));
-
+                        "Can't round the value %s to the given precision %d", value, precision));
         return value;
     }
 
@@ -410,7 +409,7 @@ public class AngleFormat extends Format {
      *
      * @param value the value to be checked for overflow
      * @param field degrees, minutes or seconds
-     * @param last {@code true} if this is the last field and we need to add the decimals part
+     * @param last {@code true} if this is the last field, and we need to add the decimal part
      * @return {@code true} if we have an overflow scenario and {@code false} otherwise
      */
     private boolean isOverflow(double value, final int field, final boolean last) {
@@ -433,7 +432,7 @@ public class AngleFormat extends Format {
      * Constructs a new {@code AngleFormat} using the current default locale and a default pattern.
      */
     public AngleFormat() {
-        this("D\u00B0MM.m'");
+        this("D°MM.m'");
     }
 
     /**
@@ -441,7 +440,7 @@ public class AngleFormat extends Format {
      * pattern.
      *
      * @param pattern Pattern to use for parsing and formatting angle. See class description for an
-     *     explanation of how this pattern work.
+     *     explanation of how this pattern works.
      * @throws IllegalArgumentException If the specified pattern is not legal.
      */
     public AngleFormat(final String pattern) throws IllegalArgumentException {
@@ -452,7 +451,7 @@ public class AngleFormat extends Format {
      * Constructs a new {@code AngleFormat} using the specified pattern and locale.
      *
      * @param pattern Pattern to use for parsing and formatting angle. See class description for an
-     *     explanation of how this pattern work.
+     *     explanation of how this pattern works.
      * @param locale Locale to use.
      * @throws IllegalArgumentException If the specified pattern is not legal.
      */
@@ -464,7 +463,7 @@ public class AngleFormat extends Format {
      * Constructs a new {@code AngleFormat} using the specified pattern and decimal symbols.
      *
      * @param pattern Pattern to use for parsing and formatting angle. See class description for an
-     *     explanation of how this pattern work.
+     *     explanation of how this pattern works.
      * @param symbols The symbols to use for parsing and formatting numbers.
      * @throws IllegalArgumentException If the specified pattern is not legal.
      */
@@ -641,7 +640,7 @@ public class AngleFormat extends Format {
      *     {@code null} if this information is not wanted. This field position shall be constructed
      *     with one of the following constants: {@link #DEGREES_FIELD}, {@link #MINUTES_FIELD},
      *     {@link #SECONDS_FIELD} or {@link #HEMISPHERE_FIELD}.
-     * @return The string buffer passed in as {@code toAppendTo}, with formatted text appended.
+     * @return The string buffer passed in as {@code toAppendTo}, with the formatted text appended.
      */
     public synchronized StringBuffer format(
             final double angle, StringBuffer toAppendTo, final FieldPosition pos) {
@@ -705,21 +704,21 @@ public class AngleFormat extends Format {
             field = PREFIX_FIELD;
         }
 
-        // Check and manage the seconds overflow
+        // Check and manage the second overflow
         if (!Double.isNaN(secondes) && isOverflow(secondes, SECONDS_FIELD, true)) {
             // set seconds to 0
             secondes = 0d;
             // carry over 1 minute
             minutes = minutes + 1;
         }
-        // Check and manage the minutes overflow
+        // Check and manage the minute overflow
         if (!Double.isNaN(minutes) && isOverflow(minutes, MINUTES_FIELD, width2 == 0)) {
             // set minutes to 0
             minutes = 0d;
             // carry over 1 degree
             degrees = degrees + 1;
         }
-        // Check and manage the degrees overflow
+        // Check and manage the degree overflow
         if (isOverflow(degrees, DEGREES_FIELD, width1 == 0)) {
             // Normalize degrees by 360
             degrees = degrees - 360d;
@@ -788,13 +787,12 @@ public class AngleFormat extends Format {
                 numberFormat.setMinimumIntegerDigits(w);
                 numberFormat.setMinimumFractionDigits(widthDecimal);
                 numberFormat.setMaximumFractionDigits(widthDecimal);
-                toAppendTo = numberFormat.format(value, toAppendTo, dummy);
             } else {
                 value *= XMath.pow10(widthDecimal);
                 numberFormat.setMaximumFractionDigits(0);
                 numberFormat.setMinimumIntegerDigits(w + widthDecimal);
-                toAppendTo = numberFormat.format(value, toAppendTo, dummy);
             }
+            toAppendTo = numberFormat.format(value, toAppendTo, dummy);
         }
         if (s != null) {
             toAppendTo.append(s);
@@ -812,7 +810,7 @@ public class AngleFormat extends Format {
      * #applyPattern}. The argument {@code obj} shall be an {@link Angle} object or one of its
      * derived class ({@link Latitude}, {@link Longitude}). If {@code obj} is a {@link Latitude}
      * object, then a symbol "N" or "S" will be appended to the end of the string (the symbol will
-     * be choosen according the angle's sign). Otherwise, if {@code obj} is a {@link Longitude}
+     * be selected according the angle's sign). Otherwise, if {@code obj} is a {@link Longitude}
      * object, then a symbol "E" or "W" will be appended to the end of the string. Otherwise, no
      * hemisphere symbol will be appended. <br>
      * <br>
@@ -826,7 +824,7 @@ public class AngleFormat extends Format {
      *     {@code null} if this information is not wanted. This field position shall be constructed
      *     with one of the following constants: {@link #DEGREES_FIELD}, {@link #MINUTES_FIELD},
      *     {@link #SECONDS_FIELD} or {@link #HEMISPHERE_FIELD}.
-     * @return The string buffer passed in as {@code toAppendTo}, with formatted text appended.
+     * @return The string buffer passed in as {@code toAppendTo}, with the formatted text appended.
      * @throws IllegalArgumentException if {@code obj} if not an object of class {@link Angle} or
      *     {@link Number}.
      */
@@ -971,7 +969,7 @@ public class AngleFormat extends Format {
             }
         } while (Character.isSpaceChar(c = source.charAt(start++)));
         switch (c) {
-            case '\u00B0':
+            case '°':
                 pos.setIndex(start);
                 return DEGREES_FIELD;
             case '\'':
@@ -981,17 +979,17 @@ public class AngleFormat extends Format {
                 pos.setIndex(start);
                 return SECONDS_FIELD;
             default:
-                return SYMBOLS.length; // Unknow field.
+                return SYMBOLS.length; // Unknown field.
         }
     }
 
     /**
      * Parses a string as an angle. This method can parse an angle even if it doesn't comply exactly
      * to the expected pattern. For example, this method will parse correctly string "<code>
-     * 48°12.34'</code>" even if the expected pattern was "{@code DDMM.mm}" (i.e. the string should
+     * 48°12.34'</code>" even if the expected pattern was "{@code DDMM.mm}" (i.e., the string should
      * have been "{@code 4812.34}"). Spaces between degrees, minutes and secondes are ignored. If
-     * the string ends with an hemisphere symbol "N" or "S", then this method returns an object of
-     * class {@link Latitude}. Otherwise, if the string ends with an hemisphere symbol "E" or "W",
+     * the string ends with a hemisphere symbol "N" or "S", then this method returns an object of
+     * class {@link Latitude}. Otherwise, if the string ends with a hemisphere symbol "E" or "W",
      * then this method returns an object of class {@link Longitude}. Otherwise, this method returns
      * an object of class {@link Angle}.
      *
@@ -1021,7 +1019,7 @@ public class AngleFormat extends Format {
     @SuppressWarnings("fallthrough")
     private synchronized Angle parse(
             final String source, final ParsePosition pos, final boolean spaceAsSeparator) {
-        double degrees = Double.NaN;
+        double degrees;
         double minutes = Double.NaN;
         double secondes = Double.NaN;
         final int length = source.length();
@@ -1079,7 +1077,7 @@ public class AngleFormat extends Format {
                 case PREFIX_FIELD:
                     {
                         pos.setIndex(indexEndField);
-                        break BigBoss;
+                        break;
                     }
                     /* ----------------------------------------------
                      * ANALYSE DU SYMBOLE SUIVANT LES PRÉSUMÉS DEGRÉS
@@ -1092,7 +1090,7 @@ public class AngleFormat extends Format {
                     {
                         secondes = degrees;
                         degrees = Double.NaN;
-                        break BigBoss;
+                        break;
                     }
                     /* ----------------------------------------------
                      * ANALYSE DU SYMBOLE SUIVANT LES PRÉSUMÉS DEGRÉS
@@ -1103,8 +1101,8 @@ public class AngleFormat extends Format {
                      */
                 default:
                     {
-                        if (width1 == 0) break BigBoss;
-                        if (!spaceAsSeparator) break BigBoss;
+                        if (width1 == 0) break;
+                        if (!spaceAsSeparator) break;
                         // fall through
                     }
                     /* ----------------------------------------------
@@ -1121,13 +1119,13 @@ public class AngleFormat extends Format {
                             index++;
                         }
                         if (!spaceAsSeparator && index != indexStartField) {
-                            break BigBoss;
+                            break;
                         }
                         pos.setIndex(index);
                         fieldObject = numberFormat.parse(source, pos);
                         if (fieldObject == null) {
                             pos.setIndex(indexStartField);
-                            break BigBoss;
+                            break;
                         }
                         indexEndField = pos.getIndex();
                         minutes = fieldObject.doubleValue();
@@ -1216,7 +1214,7 @@ public class AngleFormat extends Format {
                             index++;
                         }
                         if (!spaceAsSeparator && index != indexStartField) {
-                            break BigBoss;
+                            break;
                         }
                         pos.setIndex(index);
                         fieldObject = numberFormat.parse(source, pos);

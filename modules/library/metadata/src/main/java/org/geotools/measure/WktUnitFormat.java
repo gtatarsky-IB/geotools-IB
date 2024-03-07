@@ -32,7 +32,7 @@ import tech.units.indriya.unit.TransformedUnit;
 /**
  * UnitFormat configured to parse units. Since usually we don't know the citation in use for a
  * particular unit literal definition, this format includes the aliases of EPSG and ESRI citations,
- * in order to be able to parse the widest possible range of units.
+ * to be able to parse the widest possible range of units.
  */
 // this is in `org.geotools.measure` instead of `org.geotools.referencing.wkt`, because
 // `Units.autoCorrect` depends on it & we need `Units` for the unit definitions in gt-measure there
@@ -119,7 +119,8 @@ public final class WktUnitFormat {
                 try {
                     float factor1 = (float) unit.getConverterToAny(systemUnit).convert(1.0);
                     return Objects.hash(systemUnit, Float.floatToIntBits(factor1));
-                } catch (Throwable e) {
+                } catch (Throwable ignored) {
+                    // Again noting an ignored catch.
                 }
             }
             return unit.hashCode();

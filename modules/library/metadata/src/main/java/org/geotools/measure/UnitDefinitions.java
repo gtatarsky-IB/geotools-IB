@@ -37,8 +37,8 @@ import tech.units.indriya.unit.Units;
 /**
  * This class holds unit definitions for use in unit formatter implementations.
  *
- * <p>The individual definitions allow mixing and matching of units definitions as required for each
- * individual unit formatter implementation.
+ * <p>The individual definitions allow mixing and matching of unit definitions as required for each
+ * unit formatter implementation.
  */
 public final class UnitDefinitions {
 
@@ -64,17 +64,18 @@ public final class UnitDefinitions {
                     UnitDefinition.of(SI.AVOGADRO_CONSTANT, emptyList(), "NA", emptyList()),
                     UnitDefinition.of(SI.BOLTZMANN_CONSTANT, emptyList(), "kB", emptyList()),
                     UnitDefinition.of(SI.ELEMENTARY_CHARGE, emptyList(), "e", emptyList()),
-                    UnitDefinition.of(SI.PLANCK_CONSTANT, emptyList(), "\u210E", emptyList()));
+                    UnitDefinition.of(SI.PLANCK_CONSTANT, emptyList(), "ℎ", emptyList()));
 
     public static List<UnitDefinition> SI_DERIVED =
             listOf(
                     UnitDefinition.withStandardPrefixes(Units.BECQUEREL),
-                    UnitDefinition.of(Units.CELSIUS, PrefixDefinitions.STANDARD, "℃", asList("°C")),
+                    UnitDefinition.of(
+                            Units.CELSIUS, PrefixDefinitions.STANDARD, "℃", List.of("°C")),
                     UnitDefinition.withStandardPrefixes(Units.COULOMB),
                     // "m3" was added later, as well as (Units.SQUARE_METRE, "m2"), but not
                     // m²
                     UnitDefinition.of(Units.CUBIC_METRE, emptyList(), "㎥", emptyList()),
-                    UnitDefinition.of(Units.DAY, emptyList(), "day", asList("d")),
+                    UnitDefinition.of(Units.DAY, emptyList(), "day", List.of("d")),
                     UnitDefinition.withStandardPrefixes(Units.FARAD),
                     UnitDefinition.of(Units.GRAM, PrefixDefinitions.GRAM, "g", emptyList()),
                     UnitDefinition.withStandardPrefixes(Units.GRAY),
@@ -89,7 +90,7 @@ public final class UnitDefinitions {
                     UnitDefinition.withStandardPrefixes(Units.LUX),
                     UnitDefinition.of(Units.MINUTE, emptyList(), "min", emptyList()),
                     UnitDefinition.withStandardPrefixes(Units.NEWTON),
-                    UnitDefinition.of(Units.OHM, PrefixDefinitions.STANDARD, null, asList("Ohm")),
+                    UnitDefinition.of(Units.OHM, PrefixDefinitions.STANDARD, null, List.of("Ohm")),
                     UnitDefinition.withStandardPrefixes(Units.PASCAL),
                     UnitDefinition.withStandardPrefixes(Units.RADIAN),
                     UnitDefinition.withStandardPrefixes(Units.SIEMENS),
@@ -100,7 +101,7 @@ public final class UnitDefinitions {
                     UnitDefinition.withStandardPrefixes(Units.WATT),
                     UnitDefinition.withStandardPrefixes(Units.WEBER),
                     UnitDefinition.of(Units.WEEK, emptyList(), "week", emptyList()),
-                    UnitDefinition.of(Units.YEAR, emptyList(), "year", asList("days365")));
+                    UnitDefinition.of(Units.YEAR, emptyList(), "year", List.of("days365")));
 
     public static List<UnitDefinition> NON_SI =
             listOf(
@@ -112,11 +113,11 @@ public final class UnitDefinitions {
                     UnitDefinition.of(NonSI.DALTON, emptyList(), "Da", emptyList()),
                     UnitDefinition.of(NonSI.ASTRONOMICAL_UNIT, emptyList(), "UA", emptyList()),
                     UnitDefinition.of(NonSI.HECTARE, emptyList(), "ha", emptyList()),
-                    UnitDefinition.of(NonSI.ANGSTROM, emptyList(), "\u00C5", emptyList()),
+                    UnitDefinition.of(NonSI.ANGSTROM, emptyList(), "Å", emptyList()),
                     UnitDefinition.of(NonSI.BOHR_RADIUS, emptyList(), "a0", emptyList()),
                     UnitDefinition.of(NonSI.KNOT, emptyList(), "kn", emptyList()),
                     UnitDefinition.of(
-                            NonSI.STANDARD_GRAVITY, emptyList(), "g\\u2099", asList("gn")),
+                            NonSI.STANDARD_GRAVITY, emptyList(), "g\\u2099", List.of("gn")),
                     UnitDefinition.of(NonSI.PHOT, emptyList(), "ph", emptyList()),
                     UnitDefinition.of(NonSI.OERSTED, emptyList(), "Oe", emptyList()),
                     UnitDefinition.of(NonSI.DYNE, emptyList(), "dyn", emptyList()),
@@ -194,7 +195,7 @@ public final class UnitDefinitions {
                             DEGREE_MINUTE_SECOND,
                             emptyList(),
                             "DMS",
-                            asList("degree minute second")),
+                            List.of("degree minute second")),
                     UnitDefinition.of(
                             SEXAGESIMAL_DMS,
                             emptyList(),
@@ -204,9 +205,9 @@ public final class UnitDefinitions {
                                     "DDD.MMSSsss",
                                     "sexagesimal degree DDD.MMSSsss")),
                     UnitDefinition.of(PPM, emptyList(), "ppm", emptyList()),
-                    UnitDefinition.of(NonSI.DEGREE_ANGLE, emptyList(), "°", asList("deg")),
+                    UnitDefinition.of(NonSI.DEGREE_ANGLE, emptyList(), "°", List.of("deg")),
                     UnitDefinition.of(PIXEL, emptyList(), "pixel", emptyList()),
-                    UnitDefinition.of(USCustomary.GRADE, emptyList(), "grad", asList("grade")),
+                    UnitDefinition.of(USCustomary.GRADE, emptyList(), "grad", List.of("grade")),
                     UnitDefinition.of(USCustomary.FOOT, emptyList(), "ft", emptyList()));
 
     /** Additional unit definitions for custom units defined by EPSG formats. */
@@ -216,7 +217,7 @@ public final class UnitDefinitions {
                             DEGREE_MINUTE_SECOND,
                             emptyList(),
                             "DMS",
-                            asList("degree minute second")),
+                            List.of("degree minute second")),
                     UnitDefinition.of(
                             SEXAGESIMAL_DMS,
                             emptyList(),
@@ -228,7 +229,7 @@ public final class UnitDefinitions {
                     UnitDefinition.of(PPM, emptyList(), "ppm", emptyList()),
                     UnitDefinition.of(NonSI.DEGREE_ANGLE, emptyList(), "degree", emptyList()),
                     UnitDefinition.of(PIXEL, emptyList(), "pixel", emptyList()),
-                    UnitDefinition.of(USCustomary.GRADE, emptyList(), "grad", asList("grade")),
+                    UnitDefinition.of(USCustomary.GRADE, emptyList(), "grad", List.of("grade")),
                     UnitDefinition.of(USCustomary.FOOT, emptyList(), "ft", emptyList()));
 
     /** Additional unit definitions for custom units defined by ESRI formats. */
@@ -238,7 +239,7 @@ public final class UnitDefinitions {
                             DEGREE_MINUTE_SECOND,
                             emptyList(),
                             "DMS",
-                            asList("degree minute second")),
+                            List.of("degree minute second")),
                     UnitDefinition.of(
                             SEXAGESIMAL_DMS,
                             emptyList(),
@@ -250,8 +251,8 @@ public final class UnitDefinitions {
                     UnitDefinition.of(PPM, emptyList(), "ppm", emptyList()),
                     UnitDefinition.of(NonSI.DEGREE_ANGLE, emptyList(), "Degree", emptyList()),
                     UnitDefinition.of(PIXEL, emptyList(), "pixel", emptyList()),
-                    UnitDefinition.of(USCustomary.GRADE, emptyList(), "grad", asList("grade")),
-                    UnitDefinition.of(USCustomary.FOOT, emptyList(), "ft", asList("Foot")),
+                    UnitDefinition.of(USCustomary.GRADE, emptyList(), "grad", List.of("grade")),
+                    UnitDefinition.of(USCustomary.FOOT, emptyList(), "ft", List.of("Foot")),
                     UnitDefinition.of(FOOT_GOLD_COAST, emptyList(), null, emptyList()),
                     UnitDefinition.of(USCustomary.FOOT_SURVEY, emptyList(), "Foot_US", emptyList()),
                     UnitDefinition.of(METRE, emptyList(), "Meter", emptyList()));
@@ -262,7 +263,7 @@ public final class UnitDefinitions {
                             DEGREE_MINUTE_SECOND,
                             emptyList(),
                             "DMS",
-                            asList("degree minute second")),
+                            List.of("degree minute second")),
                     UnitDefinition.of(
                             SEXAGESIMAL_DMS,
                             emptyList(),
@@ -273,7 +274,7 @@ public final class UnitDefinitions {
                                     "sexagesimal degree DDD.MMSSsss")),
                     UnitDefinition.of(PPM, emptyList(), "ppm", emptyList()),
                     UnitDefinition.of(PIXEL, emptyList(), "pixel", emptyList()),
-                    UnitDefinition.of(USCustomary.GRADE, emptyList(), "grad", asList("grade")),
+                    UnitDefinition.of(USCustomary.GRADE, emptyList(), "grad", List.of("grade")),
                     UnitDefinition.of(FOOT_GOLD_COAST, emptyList(), null, emptyList()),
                     UnitDefinition.of(USCustomary.FOOT_SURVEY, emptyList(), "Foot_US", emptyList()),
                     UnitDefinition.of(NonSI.DEGREE_ANGLE, emptyList(), "degree", emptyList()),

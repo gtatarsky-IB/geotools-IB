@@ -43,10 +43,10 @@ public class Angle implements Comparable<Angle>, Serializable {
     /** A shared instance of {@link AngleFormat}. */
     private static volatile Format format;
 
-    /** Define how angle can be converted to {@link Number} objects. */
+    /* Define how an angle can be converted to {@link Number} objects. */
     static {
         ClassChanger.register(
-                new ClassChanger<Angle, Double>(Angle.class, Double.class) {
+                new ClassChanger<>(Angle.class, Double.class) {
                     @Override
                     protected Double convert(final Angle o) {
                         return o.theta;
@@ -59,11 +59,11 @@ public class Angle implements Comparable<Angle>, Serializable {
                 });
     }
 
-    /** Angle value in degres. */
+    /** Angle value in degrees. */
     private final double theta;
 
     /**
-     * Contructs a new angle with the specified value.
+     * Constructs a new angle with the specified value.
      *
      * @param theta Angle in degrees.
      */
@@ -73,8 +73,8 @@ public class Angle implements Comparable<Angle>, Serializable {
 
     /**
      * Constructs a newly allocated {@code Angle} object that represents the angle value represented
-     * by the string. The string should represents an angle in either fractional degrees (e.g.
-     * 45.5°) or degrees with minutes and seconds (e.g. 45°30').
+     * by the string. The string should represent an angle in either fractional degrees (e.g.,
+     * 45.5°) or degrees with minutes and seconds (e.g., 45° 30').
      *
      * @param string A string to be converted to an {@code Angle}.
      * @throws NumberFormatException if the string does not contain a parsable angle.
@@ -130,7 +130,7 @@ public class Angle implements Comparable<Angle>, Serializable {
     }
 
     /**
-     * Compares two {@code Angle} objects numerically. The comparaison is done as if by the {@link
+     * Compares two {@code Angle} objects numerically. The comparison is done as if by the {@link
      * Double#compare(double,double)} method.
      */
     @Override

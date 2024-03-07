@@ -27,7 +27,7 @@ import tech.units.indriya.function.AbstractConverter;
  * <p><cite>sign - degrees - decimal point - minutes (two digits) - integer seconds (two digits) -
  * fraction of seconds (any precision)</cite>.
  *
- * <p>Unfortunatly, this pseudo-unit is extensively used in the EPSG database.
+ * <p>Unfortunately, this pseudo-unit is extensively used in the EPSG database.
  *
  * @since 2.1
  * @version $Id$
@@ -104,7 +104,7 @@ class SexagesimalConverter extends AbstractConverter {
         final int min = (int) value; // Round toward 0
         value = (value - min) * 60;
         final int sec = (int) value; // Round toward 0
-        value -= sec; // The remainer (fraction of seconds)
+        value -= sec; // The remainder (fraction of seconds)
         return (((deg * 100 + min) * 100 + sec) + value) / divider;
     }
 
@@ -130,7 +130,7 @@ class SexagesimalConverter extends AbstractConverter {
                 else min--;
                 value = 0;
             } else {
-                throw new ArithmeticException("Invalid secondes: " + value);
+                throw new ArithmeticException("Invalid seconds: " + value);
             }
         }
         value = ((value / 60) + min) / 60 + deg;
@@ -178,7 +178,7 @@ class SexagesimalConverter extends AbstractConverter {
         for (int i = 0; i <= 3; i++) {
             switch (i) {
                 case 0:
-                    break; // Do nothing since candidate is already set to INTEGER/
+                    break; // Do nothing since the candidate is already set to INTEGER/
                 case 2:
                     candidate = FRACTIONAL;
                     break;

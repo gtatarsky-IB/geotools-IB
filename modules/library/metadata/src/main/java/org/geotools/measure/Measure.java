@@ -20,7 +20,7 @@ import javax.measure.Unit;
 import org.geotools.util.Utilities;
 
 /**
- * A scalar with an unit.
+ * A scalar with a unit.
  *
  * @since 2.1
  * @version $Id$
