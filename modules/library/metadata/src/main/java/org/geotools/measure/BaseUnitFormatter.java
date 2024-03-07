@@ -16,17 +16,12 @@
  */
 package org.geotools.measure;
 
-import java.io.IOException;
-import java.text.ParsePosition;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.measure.Quantity;
 import javax.measure.Unit;
-import javax.measure.format.MeasurementParseException;
-import tech.units.indriya.format.SimpleUnitFormat;
+import org.geotools.measure.SimpleUnitFormatForwarder.DefaultFormatForwarder;
 
 /**
  * This class encapsulates the required machinations to initialize the unit formatter implementation
@@ -35,17 +30,7 @@ import tech.units.indriya.format.SimpleUnitFormat;
  * <p>GeoTools' unit formatters should be implemented by calling the provided constructors.
  */
 // This class should be final, currently only prevented by the Wkt unit formatter subclass.
-public class BaseUnitFormatter extends SimpleUnitFormat implements UnitFormatter {
-
-    private static final char MIDDLE_DOT = '\u00b7';
-    private static final char EXPONENT_ONE = '\u00b9';
-    private static final char EXPONENT_TWO = '\u00b2';
-    private static final char EXPONENT_THREE = '\u00b3';
-
-    private SimpleUnitFormat delegateFormatter = SimpleUnitFormat.getNewInstance();
-
-    @Deprecated private Map<String, Unit<?>> nameToUnit = new HashMap<>();
-    @Deprecated private Map<Unit<?>, String> unitToName = new HashMap<>();
+public class BaseUnitFormatter extends DefaultFormatForwarder {
 
     /**
      * Create a new {@code BaseUnitFormatter} instance, initialized with provided the unit
@@ -93,7 +78,6 @@ public class BaseUnitFormatter extends SimpleUnitFormat implements UnitFormatter
      * @return an immutable map that shows the units (associated with their symbols) that this unit
      *     formatter contains
      */
-    @Deprecated
     public Map<Unit<?>, String> getUnitToSymbolMap() {
         return Collections.unmodifiableMap(this.unitToName);
     }
@@ -102,17 +86,20 @@ public class BaseUnitFormatter extends SimpleUnitFormat implements UnitFormatter
      * @return an immutable map that shows the symbols (associated with their units) that this unit
      *     formatter contains
      */
-    @Deprecated
     public Map<String, Unit<?>> getSymbolToUnitMap() {
         return Collections.unmodifiableMap(this.nameToUnit);
+    }
+
+    @Override
+    public void label(Unit<?> unit, String label) {
+        super.label(unit, label);
+        addUnit(unit);
     }
 
     /** Defaults to being a no-op, subclasses can override */
     protected void addUnit(Unit<?> unit) {}
 
     private void addUnit(Unit<?> unit, String unitSymbol, PrefixDefinition prefix) {
-        this.nameToUnit.put(unitSymbol, unit);
-        this.unitToName.put(unit, unitSymbol);
         Unit<?> prefixedUnit = unit.prefix(prefix.getPrefix());
         String prefixString = prefix.getPrefix().getSymbol();
         String prefixedSymbol = prefixString + unitSymbol;
@@ -123,8 +110,6 @@ public class BaseUnitFormatter extends SimpleUnitFormat implements UnitFormatter
     }
 
     private void addAlias(Unit<?> unit, String unitSymbol, PrefixDefinition prefix) {
-        this.nameToUnit.put(unitSymbol, unit);
-        this.unitToName.put(unit, unitSymbol);
         Unit<?> prefixedUnit = unit.prefix(prefix.getPrefix());
         String prefixString = prefix.getPrefix().getSymbol();
         String prefixedSymbol = prefixString + unitSymbol;
@@ -132,77 +117,5 @@ public class BaseUnitFormatter extends SimpleUnitFormat implements UnitFormatter
         for (String prefixAlias : prefix.getPrefixAliases()) {
             this.alias(prefixedUnit, prefixAlias + unitSymbol);
         }
-    }
-
-    @Override
-    public Appendable format(Unit<?> unit, Appendable appendable) throws IOException {
-        return delegateFormatter.format(unit, appendable);
-    }
-
-    @Override
-    public Unit<? extends Quantity> parseProductUnit(CharSequence csq, ParsePosition pos)
-            throws MeasurementParseException {
-        return delegateFormatter.parseProductUnit(csq, pos);
-    }
-
-    @Override
-    public Unit<? extends Quantity> parseSingleUnit(CharSequence csq, ParsePosition pos)
-            throws MeasurementParseException {
-        return delegateFormatter.parseSingleUnit(csq, pos);
-    }
-
-    @Override
-    public void label(Unit<?> unit, String label) {
-        nameToUnit.put(label, unit);
-        unitToName.put(unit, label);
-        delegateFormatter.label(unit, label);
-        addUnit(unit);
-    }
-
-    @Override
-    public Unit<?> parse(CharSequence csq, ParsePosition cursor) throws IllegalArgumentException {
-        return delegateFormatter.parse(csq, cursor);
-    }
-
-    @Override
-    public Unit<?> parse(CharSequence csq) throws MeasurementParseException {
-        return delegateFormatter.parse(csq);
-    }
-
-    @Override
-    protected Unit<?> parse(CharSequence csq, int index) throws IllegalArgumentException {
-        return parse(csq, new ParsePosition(index));
-    }
-
-    @Override
-    public void alias(Unit<?> unit, String alias) {
-        nameToUnit.put(alias, unit);
-        delegateFormatter.alias(unit, alias);
-    }
-
-    /** Copy from DefaultFormatter */
-    @Override
-    protected boolean isValidIdentifier(String name) {
-        if ((name == null) || (name.length() == 0)) return false;
-        return isUnitIdentifierPart(name.charAt(0));
-    }
-
-    protected static boolean isUnitIdentifierPart(char ch) {
-        return Character.isLetter(ch)
-                || (!Character.isWhitespace(ch)
-                        && !Character.isDigit(ch)
-                        && (ch != MIDDLE_DOT)
-                        && (ch != '*')
-                        && (ch != '/')
-                        && (ch != '(')
-                        && (ch != ')')
-                        && (ch != '[')
-                        && (ch != ']')
-                        && (ch != EXPONENT_ONE)
-                        && (ch != EXPONENT_TWO)
-                        && (ch != EXPONENT_THREE)
-                        && (ch != '^')
-                        && (ch != '+')
-                        && (ch != '-'));
     }
 }
